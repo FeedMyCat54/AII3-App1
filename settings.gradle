@@ -1,0 +1,2 @@
+rootProject.name='AII3-App1'
+include ':app'
