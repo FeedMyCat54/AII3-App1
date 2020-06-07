@@ -1,62 +1,33 @@
 package com.feedmycat.aii3_app1;
 
-import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.Toast;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import java.util.HashMap;
-import java.util.Map;
+import androidx.fragment.app.FragmentActivity;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MainActivity extends AppCompatActivity {
-  private static final String TAG = "MainActivity";
-
-  public static final String KEY_TITLE = "title";
-  public static final String KEY_DESCRIPTION = "description";
-
-  private Button btnTest;
-
-  private FirebaseFirestore db = FirebaseFirestore.getInstance();
+public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
+  GoogleMap map;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-    btnTest = findViewById(R.id.test_btn);
-
-    btnTest.setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        saveDocument();
-      }
-    });
+    SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+        .findFragmentById(R.id.map);
+    mapFragment.getMapAsync(this);
   }
 
-  private void saveDocument() {
-    Map<String, Object> doc = new HashMap<>();
-    doc.put(KEY_TITLE, "title1");
-    doc.put(KEY_DESCRIPTION, "description1");
+  @Override
+  public void onMapReady(GoogleMap googleMap) {
+    map = googleMap;
 
-    db.collection("TestCollection").document("First document").set(doc)
-        .addOnSuccessListener(new OnSuccessListener<Void>() {
-          @Override
-          public void onSuccess(Void aVoid) {
-            Toast.makeText(MainActivity.this, "Document Saved", Toast.LENGTH_SHORT).show();
-          }
-        })
-        .addOnFailureListener(new OnFailureListener() {
-          @Override
-          public void onFailure(@NonNull Exception e) {
-            Toast.makeText(MainActivity.this, "Error!", Toast.LENGTH_SHORT).show();
-            Log.d(TAG, e.toString());
-          }
-        });
+    LatLng Ampelokipoi = new LatLng(40.6454036, 22.9289857);
+    map.addMarker(new MarkerOptions().position(Ampelokipoi).title("Ampleokipoi"));
+    map.animateCamera(CameraUpdateFactory.newLatLng(Ampelokipoi));
   }
 }
