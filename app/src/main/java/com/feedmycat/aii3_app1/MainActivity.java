@@ -10,18 +10,23 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
+import com.feedmycat.aii3_app1.BottomSheetDialog.BottomSheetListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MainActivity extends FragmentActivity implements OnMapReadyCallback,
+    OnMarkerClickListener, BottomSheetListener {
   private List<Marker> markers = new ArrayList<>();
+  private Marker selectedMarker;
 
   GoogleMap map;
 
@@ -39,11 +44,13 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
   public void onMapReady(GoogleMap googleMap) {
     map = googleMap;
 
+    map.setOnMarkerClickListener(this);
+
     LatLng Ampelokipoi = new LatLng(40.6454036, 22.9289857);
     map.addMarker(new MarkerOptions().position(Ampelokipoi).title("Ampleokipoi"));
     map.animateCamera(CameraUpdateFactory.newLatLng(Ampelokipoi));
 
-    // The minimum time (in miliseconds) the system will wait until checking if the location changed
+    // The minimum time (in milliseconds) the system will wait until checking if the location changed
     int minTime = 1000;
     // The minimum distance (in meters) traveled until you will be notified
     float minDistance = 5;
@@ -71,6 +78,30 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
       return;
     }
     locationManager.requestLocationUpdates(bestProvider, minTime, minDistance, myLocListener);
+  }
+
+  @Override
+  public boolean onMarkerClick(Marker marker) {
+    BottomSheetDialog bottomSheetDialog = new BottomSheetDialog();
+    bottomSheetDialog.show(getSupportFragmentManager(), "bottom sheet dialog");
+    selectedMarker = marker;
+    return true;
+  }
+
+  @Override
+  public void onSpinnerItemSelected(String color) {
+    switch (color) {
+      case "Red": selectedMarker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+        break;
+      case "Blue": selectedMarker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+        break;
+      case "Green": selectedMarker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+        break;
+      case "Yellow": selectedMarker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+        break;
+      case "Orange": selectedMarker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+        break;
+    }
   }
 
   private class MyLocationListener implements LocationListener {
