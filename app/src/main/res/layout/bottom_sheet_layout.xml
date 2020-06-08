@@ -18,4 +18,10 @@
     android:id="@+id/spinner_color"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"/>
+
+  <TextView
+    android:id="@+id/tv_pressure"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textSize="25sp"/>
 </LinearLayout>
