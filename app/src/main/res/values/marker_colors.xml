@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string-array name="marker_colors_array">
+    <item>Red</item>
+    <item>Blue</item>
+    <item>Green</item>
+    <item>Yellow</item>
+    <item>Orange</item>
+  </string-array>
+</resources>
