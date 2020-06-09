@@ -21,14 +21,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-public class BottomSheetDialog extends BottomSheetDialogFragment implements OnItemSelectedListener,
-    SensorEventListener {
+public class BottomSheetDialog extends BottomSheetDialogFragment implements OnItemSelectedListener {
   private EditText description;
   private TextView pressureTextView;
   private String selectedColor;
   private BottomSheetListener mListener;
-  private SensorManager sensorManager;
-  private Sensor pressure;
 
   private boolean initialCheck = true;
 
@@ -57,11 +54,6 @@ public class BottomSheetDialog extends BottomSheetDialogFragment implements OnIt
     spinner.setOnItemSelectedListener(this);
     spinner.setAdapter(adapter);
 
-    // Get an instance of the sensor service, and use that to get an instance of
-    // a particular sensor.
-    sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
-    pressure = sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
-
     return v;
   }
 
@@ -80,32 +72,6 @@ public class BottomSheetDialog extends BottomSheetDialogFragment implements OnIt
   @Override
   public void onNothingSelected(AdapterView<?> parent) {
 
-  }
-
-  @Override
-  public void onSensorChanged(SensorEvent event) {
-    // Display the pressure in the TextView
-    float millibarsOfPressure = event.values[0];
-    pressureTextView.setText(String.format("%.3f nbar", millibarsOfPressure));
-  }
-
-  @Override
-  public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-  }
-
-  @Override
-  public void onResume() {
-    // Register a listener for the sensor.
-    super.onResume();
-    sensorManager.registerListener(this, pressure, SensorManager.SENSOR_DELAY_NORMAL);
-  }
-
-  @Override
-  public void onPause() {
-    // Unregister the sensor when the activity pauses.
-    super.onPause();
-    sensorManager.unregisterListener(this);
   }
 
   // Interface for handling bottom sheet actions
