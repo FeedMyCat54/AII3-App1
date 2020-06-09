@@ -96,6 +96,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     locationManager.requestLocationUpdates(bestProvider, minTime, minDistance, myLocListener);
   }
 
+  // When a marker is clicked open the bottom sheet
   @Override
   public boolean onMarkerClick(Marker marker) {
     BottomSheetDialog bottomSheetDialog = new BottomSheetDialog();
@@ -104,6 +105,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     return true;
   }
 
+  // Change the color of the marker
   @Override
   public void onSpinnerItemSelected(String color) {
     switch (color) {
@@ -120,8 +122,21 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
   }
 
+  // Update the description
+  @Override
+  public void saveDescription(String description) {
+    databaseManager.updateMarkerDescription(selectedMarker.getTitle(), description);
+  }
+
+  // Update the color
+  @Override
+  public void saveColor(String color) {
+    databaseManager.updateMarkerColor(selectedMarker.getTitle(), color);
+  }
+
   private class MyLocationListener implements LocationListener {
 
+    // When the location changes create the marker and add it to the database
     @Override
     public void onLocationChanged(Location loc) {
       if (loc != null) {
@@ -197,6 +212,3 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     return newMarker;
   }
 }
-
-
-//String.format("%.3f nbar", millibarsOfPressure)

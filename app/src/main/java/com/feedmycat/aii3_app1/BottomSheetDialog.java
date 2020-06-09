@@ -2,10 +2,6 @@ package com.feedmycat.aii3_app1;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,24 +11,23 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 public class BottomSheetDialog extends BottomSheetDialogFragment implements OnItemSelectedListener {
   private EditText description;
-  private TextView pressureTextView;
   private String selectedColor;
   private BottomSheetListener mListener;
 
   private boolean initialCheck = true;
 
+  // Event that fires when the bottom sheet is dismissed
   @Override
   public void onDismiss(@NonNull DialogInterface dialog) {
     super.onDismiss(dialog);
-    Toast.makeText(getActivity(), description.getText().toString(), Toast.LENGTH_SHORT).show();
+    mListener.saveDescription(description.getText().toString());
+    mListener.saveColor(selectedColor);
   }
 
   @Nullable
@@ -42,7 +37,6 @@ public class BottomSheetDialog extends BottomSheetDialogFragment implements OnIt
     View v = inflater.inflate(R.layout.bottom_sheet_layout, container, false);
 
     description = v.findViewById(R.id.et_description);
-    pressureTextView = v.findViewById(R.id.tv_pressure);
     // Gets the spinner
     Spinner spinner = v.findViewById(R.id.spinner_color);
     // Creates array adapter with the colors array
@@ -77,6 +71,8 @@ public class BottomSheetDialog extends BottomSheetDialogFragment implements OnIt
   // Interface for handling bottom sheet actions
   public interface BottomSheetListener {
     void onSpinnerItemSelected(String color);
+    void saveDescription(String description);
+    void saveColor(String color);
   }
 
   // Attach the fragment to the main Activity
