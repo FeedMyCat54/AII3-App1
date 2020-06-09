@@ -16,7 +16,7 @@ public class DatabaseManager {
   private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
   // Adds a marker document
-  public void addMarker(final String title, double latitude, double longitude, double barometer) {
+  public void addMarker(final String title, double latitude, double longitude, float barometer) {
     Map<String, Object> marker = new HashMap<>();
     marker.put(KEY_TITLE, title);
     marker.put(KEY_LATITUDE, latitude);

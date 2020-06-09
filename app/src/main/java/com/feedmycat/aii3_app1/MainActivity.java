@@ -38,6 +38,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
   private SensorManager sensorManager;
   private Sensor pressure;
   private float currentPressure;
+  private DatabaseManager databaseManager;
 
   GoogleMap map;
 
@@ -63,9 +64,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     map.setOnMarkerClickListener(this);
 
-    LatLng Ampelokipoi = new LatLng(40.6454036, 22.9289857);
-    map.addMarker(new MarkerOptions().position(Ampelokipoi).title("Ampleokipoi"));
-    map.animateCamera(CameraUpdateFactory.newLatLng(Ampelokipoi));
+    databaseManager = new DatabaseManager();
 
     // The minimum time (in milliseconds) the system will wait until checking if the location changed
     int minTime = 1000;
@@ -128,6 +127,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
       if (loc != null) {
         try {
           Marker marker = createMarker(loc);
+          databaseManager.addMarker(marker.getTitle(), marker.getPosition().latitude, marker.getPosition().longitude, currentPressure);
         } catch (IOException e) {
           System.out.println(e.getMessage());
         }
@@ -190,7 +190,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     // When there are more than 5 markers remove the oldest one
     if (markers.size() > 5) {
       markers.get(0).remove();
-      markers.remove(0);
+      Marker deletedMarker = markers.remove(0);
+      databaseManager.deleteMarker(deletedMarker.getTitle());
     }
 
     return newMarker;
