@@ -11,7 +11,9 @@ import java.util.Map;
 public class DatabaseManager {
 
   private static final String TAG = "DatabaseManager";
-  private static final String KEY_TITLE = "title", KEY_LATITUDE = "latitude", KEY_LONGITUDE = "longitude", KEY_BAROMETER = "barometer";
+  private static final String KEY_TITLE = "title", KEY_LATITUDE = "latitude",
+      KEY_LONGITUDE = "longitude", KEY_BAROMETER = "barometer", KEY_COLOR = "color",
+      KEY_DESCRIPTION = "description";
 
   private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -22,6 +24,8 @@ public class DatabaseManager {
     marker.put(KEY_LATITUDE, latitude);
     marker.put(KEY_LONGITUDE, longitude);
     marker.put(KEY_BAROMETER, barometer);
+    marker.put(KEY_COLOR, "Red");
+    marker.put(KEY_DESCRIPTION, "");
 
     db.collection("Markers").document(title)
         .set(marker)

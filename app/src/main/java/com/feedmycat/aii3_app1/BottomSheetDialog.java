@@ -17,7 +17,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 public class BottomSheetDialog extends BottomSheetDialogFragment implements OnItemSelectedListener {
   private EditText description;
-  private String selectedColor;
+  private String selectedColor = "Red";
   private BottomSheetListener mListener;
 
   private boolean initialCheck = true;
